@@ -108,17 +108,22 @@ classdef Superelement_2v_GBMS
                     K_II = obj.K_UC(obj.dofs.I,obj.dofs.I);
                     K_IA = obj.K_UC(obj.dofs.I,obj.dofs.A);
                     M_II = obj.M_UC(obj.dofs.I,obj.dofs.I);
-%                     M_II = real(M_II + M_II')/2;
-%                     K_II = real(K_II + K_II')/2;
+                    M_II = real(M_II + M_II')/2;
+                    K_II = real(K_II + K_II')/2;
                     stat_modes = -linsolve(full(K_II), full(K_IA));
+                    
+                    %% get interior modes
+                    fprintf("Interior modal reduction:4...")
+                    fprintf('%d/%d\n', obj.nModeI, numel(obj.dofs.I));   
+                    % [int_modes,~] = eigs(K_II, M_II, obj.nModeI, 'smallestabs');
+                    [int_modes,~] = eigbd(K_II, M_II, obj.nModeI, 'smallestabs', 'eigval_max', (2*pi*freq)^2);
+                    obj.nModeI = size(int_modes,2);
+
                     %% get reduced dofs index
                     obj.dofs_red = obj.dofs;
                     obj.dofs_red.I = obj.dofs_red.L(end) + [1:obj.nModeI];
                     obj.dofs_red.nDOF = obj.dofs_red.nDOF_A + obj.nModeI;
-                    %% get interior modes
-                    fprintf("Interior modal reduction:4...")
-                    fprintf('%d/%d\n', obj.nModeI, numel(obj.dofs.I));   
-                    [int_modes,~] = eigs(K_II, M_II, obj.nModeI, 'smallestabs');
+
                     %% Get subspace
                     obj.V_UC = zeros(obj.dofs.nDOF, obj.dofs_red.nDOF);
                     obj.V_UC(obj.dofs.A, obj.dofs_red.A) = eye(obj.dofs_red.nDOF_A);

@@ -14,8 +14,7 @@ savename = 'vbplate_30x30_hbms';
 %% Analysis setup
 options.nModeI = 20;
 options.nModeA = 30;
-options.nEig = 1000;
-options.exppt = 2000;
+options.exppt = 10000;
 
 %% Hierarchical reduction
 uz_hbms = hss(uc_model, param, tree_model, options);

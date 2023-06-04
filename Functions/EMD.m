@@ -3,7 +3,7 @@ function x_resp = EMD(K, M, F, R, freq, nModeI)
 %% initialize the reduced system
 if nModeI < size(K,1)/1.5
     disp("EMD...")
-    [V, ~] = eigs(real(K+K')/2, real(M+M')/2, nModeI, 'smallestabs');
+    [V, ~] = eigbd(real(K+K')/2, real(M+M')/2, nModeI, 'smallestabs', 'eigval_max', (6*2*pi*max(freq))^2);
     stt_mode = real(K+K')\real(F);
     V = [V, stt_mode/norm(stt_mode)];
     K_red = V'*K*V;

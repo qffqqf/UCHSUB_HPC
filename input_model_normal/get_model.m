@@ -6,8 +6,8 @@ warning('off','all')
 tic
 %% UC model setup
 filename = 'uclvb_spcoarse';
-plate_file = 'plate_15x15.mat';
-savename = "..\input_model_normal\input_model_15x15.mat";
+plate_file = 'plate_40x40.mat';
+savename = ".\input_model_normal\input_model_40x40.mat";
 import_option = 'mat'; 
 n_dofnodes = 3; 
 [K_UC_FOM, M_UC_FOM, C_UC_FOM, UC_nodes, UC_coordinates, L_UC_x, L_UC_y] = import_FE_UC3(filename);
@@ -18,14 +18,14 @@ disp('Loading UC model ...')
 
 %% Get force
 F_UC_FOM = zeros(UC_dofs.nDOF,1);
-UC_forc = 6*(15-1)+1; 
+UC_forc = 16*(40-1)+1; 
 picker_F = @(r) norm(r-[L_UC_x,L_UC_y,0])<1e-10;
 force_UC_node = pick_nodes(mesh_data, picker_F);
 F_UC_FOM(force_UC_node*3) = 1;
 
 %% Get response
 R_UC_FOM = zeros(UC_dofs.nDOF,1);
-UC_resp = 10*(15-1)+1; 
+UC_resp = 24*(40-1)+1; 
 picker_R = @(r) norm(r-[L_UC_x,L_UC_y,0])<1e-10;
 response_UC_node = pick_nodes(mesh_data, picker_R);
 R_UC_FOM(response_UC_node*3) = 1;
